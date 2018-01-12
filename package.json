@@ -1,0 +1,21 @@
+{
+    "name": "linebot",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+      "start": "node server.js"
+    },
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+      "@line/bot-sdk": "^5.2.0",
+      "axios": "^0.17.1",
+      "node-line-bot-api": "^0.1.4",
+      "request": "^2.83.0",
+      "crypto": "^1.0.1",
+      "express": "^4.16.2",
+      "child-process-promise": "^2.2.1",
+      "ddg": "^0.0.3"
+    }
+  }

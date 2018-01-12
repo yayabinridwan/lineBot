@@ -66,7 +66,7 @@ function handleText(message, replyToken, source) {
         return replyText(replyToken, 'Bot can\'t use profile API without user ID');    
         }
       default:
-         var search = ddg.query(replyText, options, function(err, data){
+         var search = ddg.query(message.text, options, function(err, data){
             console.log(data.AbstractText)
         });
          return replyText(replyToken, message.text);

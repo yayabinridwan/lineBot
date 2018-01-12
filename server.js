@@ -20,7 +20,6 @@ const options = {
 
 // create LINE SDK client
 const client = new line.Client(config);
-g
 
 
 
@@ -67,7 +66,7 @@ function handleText(message, replyToken, source) {
         return replyText(replyToken, 'Bot can\'t use profile API without user ID');    
         }
       default:
-         var search = ddg.query('bioshock', options, function(err, data){
+         var search = ddg.query(replyText, options, function(err, data){
             console.log(data.AbstractText)
         });
          return replyText(replyToken, message.text);

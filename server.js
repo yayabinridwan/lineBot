@@ -8,13 +8,19 @@ const config = {
   channelAccessToken: "bP51u0Q7bORxv5Eh4Z3kP4SoDLEqP+ysPnqxCRy9oZwjsSoQHTviSLk7BVbapb0PFXhkniJpz9wAqGpDp+4J2MhuZmrmZWCizhSBXllUKuonnx81ESGGkB8CDJiwqIk64DK4E1V6+nqePqEQSWpRagdB04t89/1O/w1cDnyilFU=" ,
   channelSecret: "056b3f3a932f10d7f86011989907f0ac",
 };
-const DDG = require('node-ddg-api').DDG;
-const ddg = new DDG('botLine');
- 
+
+const ddg = require('ddg');
+
+const options = {
+		"useragent": "My duckduckgo app",
+		"no_redirects": "1",
+        "no_html": "0",
+        "format": "json"
+};
 
 // create LINE SDK client
 const client = new line.Client(config);
-
+g
 
 
 
@@ -61,12 +67,9 @@ function handleText(message, replyToken, source) {
         return replyText(replyToken, 'Bot can\'t use profile API without user ID');    
         }
       default:
-        var search = ddg.instantAnswer(message.text, {skip_disambig: '0'}, function(err, response) {
-            console.log(response);
-              })
-        
-
-         console.log(search);
+         var search = ddg.query('bioshock', options, function(err, data){
+            console.log(data.AbstractText)
+        });
          return replyText(replyToken, message.text);
   }
 }

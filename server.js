@@ -66,12 +66,13 @@ function handleText(message, replyToken, source) {
         return replyText(replyToken, 'Bot can\'t use profile API without user ID');    
         }
       default:
-         var search = [ddg.query(message.text, options, function(err, data){
-            JSON.parse(data);
+         var search = {
+            cari: ddg.query(message.text, options, function(err, data){
             data.AbstractText;
-        })]
-
-         return replyText(replyToken, search);
+        }),
+            hasil: '' + data.AbstractText;
+        }
+         return replyText(replyToken, search.hasil);
   }
 }
 // listen on port

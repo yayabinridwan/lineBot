@@ -73,14 +73,14 @@ function handleText(message, replyToken, source) {
           ddg.query(message.text, options, function(err, data){
             axios.get(data.AbstractText)
             .then(response => {
-              
+              console.log(data.AbstractText)
             })
             .catch(error => {
               console.log('Error fetching and parsing data', error);
             });
           })}
        
-         var search = ['pencarian anda +' + handleSearch]
+         var search = ['pencarian anda +' + handleSearch()]
          return replyText(replyToken, search);
   }
 }

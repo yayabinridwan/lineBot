@@ -71,12 +71,16 @@ function handleText(message, replyToken, source) {
       default:
         function handleSearch() {
           ddg.query(message.text, options, function(err, data){
-            var hasil =['']
+            var hasil = 
             hasil.push(data.AbstractText)
           })}
-       
-         var search = ['pencarian anda +' + handleSearch()]
-         return replyText(replyToken, search);
+          
+         var search = [{data: function handleSearch() {
+          ddg.query(message.text, options, function(err, data){
+            var hasil = ['']
+            hasil.push(data.AbstractText)
+          })}}]
+         return replyText(replyToken, search.data);
   }
 }
 // listen on port

@@ -66,13 +66,13 @@ function handleText(message, replyToken, source) {
         return replyText(replyToken, 'Bot can\'t use profile API without user ID');    
         }
       default:
-         var search = {
-            cari: ddg.query(message.text, options, function(err, data){
+         function handleSearch() {
+          ddg.query(message.text, options, function(err, data){
             data.AbstractText;
-        }),
-            hasil: '' + data.AbstractText;
-        }
-         return replyText(replyToken, search.hasil);
+          })}
+
+         var search = ['pencarian anda +' + handleSearch]
+         return replyText(replyToken, search);
   }
 }
 // listen on port

@@ -47,6 +47,9 @@ const replyText = (token, texts) => {
   );
 };
 
+
+
+
  
 function handleText(message, replyToken, source) {
  
@@ -66,11 +69,17 @@ function handleText(message, replyToken, source) {
         return replyText(replyToken, 'Bot can\'t use profile API without user ID');    
         }
       default:
-         function handleSearch() {
+        function handleSearch() {
           ddg.query(message.text, options, function(err, data){
-            data.AbstractText;
+            axios.get(data.AbstractText)
+            .then(response => {
+              
+            })
+            .catch(error => {
+              console.log('Error fetching and parsing data', error);
+            });
           })}
-
+       
          var search = ['pencarian anda +' + handleSearch]
          return replyText(replyToken, search);
   }

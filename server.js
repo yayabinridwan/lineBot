@@ -70,17 +70,22 @@ function handleText(message, replyToken, source) {
         }
       default:
         function handleSearch() {
-          ddg.query(message.text, options, function(err, data){
-            var hasil = 
-            hasil.push(data.AbstractText)
-          })}
-          
-         var search = [{data: function handleSearch() {
-          ddg.query(message.text, options, function(err, data){
-            var hasil = ['']
-            hasil.push(data.AbstractText)
-          })}}]
-         return replyText(replyToken, search.data);
+          const search = message.text
+          axios
+            .get('http://api.duckduckgo.com/?q=${search}&format=json')
+            .then(res => {
+              const data = res.data.AbstractText
+  
+              if (data.childern.length < 1) {
+                return replyText(replyToken, ['pecarian not found'])
+              }
+              else {
+                return replyText(replyToken, ['pencarian ${data}']);
+              }
+            })
+           .catch(err => console.log(err)) 
+        }
+        return handleSearch;
   }
 }
 // listen on port

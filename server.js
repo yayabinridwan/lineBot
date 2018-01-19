@@ -72,20 +72,20 @@ function handleText(message, replyToken, source) {
         function handleSearch() {
           const search = message.text
           axios
-            .get('http://api.duckduckgo.com/?q=${search}&format=json')
+            .get(`http://api.duckduckgo.com/?q=${search}&format=json&pretty=1`)
             .then(res => {
-              const data = res.data.AbstractText
+              const data = response.Results[0].FirstURL;
   
               if (data.childern.length < 1) {
                 return replyText(replyToken, ['pecarian not found'])
               }
               else {
-                return replyText(replyToken, ['pencarian ${data}']);
+                return replyText(replyToken, ['pencarian' + data]);
               }
             })
            .catch(err => console.log(err)) 
         }
-        return handleSearch;
+        return handleSearch();
   }
 }
 // listen on port

@@ -80,7 +80,7 @@ function handleText(message, replyToken, source) {
                   return [
                     client.replyMessage(replyToken, { type: 'image',  originalContentUrl: hasilImg,
                     previewImageUrl: hasilImg}), 
-                    replyText(replyToken, ['hasil pencarian kamu adalah', '' + handleSearch])
+                    replyText(replyToken, ['hasil pencarian kamu adalah', '' + hasilSearch])
                   ]
               }
             })

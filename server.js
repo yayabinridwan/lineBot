@@ -79,22 +79,24 @@ function handleText(message, replyToken, source) {
                 default:
                   return [
                     client.replyMessage(replyToken, {
-                      "type": "template",
-                      "altText": "Hasil Pencarian Kamu" + hasilSearch,
-                      "template": {
-                          "type": "image_carousel",
-                          "columns": [
-                              {
-                                "imageUrl": hasilImg,
-                                "action": {
-                                  "type": "postback",
-                                  "label": "go to url",
-                                  "data": "action=buy&itemid=111"
-                                }
-                              }
-                          ]
-                      }
-                    })
+                      type: 'template',
+                      altText: 'Carousel alt text',
+                      template: {
+                        type: 'carousel',
+                        columns: [
+                          {
+                            thumbnailImageUrl: hasilImg,
+                            title: 'hasil pencarian',
+                            text: hasilSearch,
+                            actions: [
+                              { label: 'Go to url', type: 'url', url: 'google.com' },
+                              { label: 'Terimakasih atas pencarian kamu', type: 'postback', data: 'terimakasih' },
+                            ],
+                          }
+                        ],
+                      },
+                    }
+                  )
                   ]
               }
             })

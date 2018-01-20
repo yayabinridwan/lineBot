@@ -47,12 +47,17 @@ const replyText = (token, texts) => {
   );
 };
 
-
-
-
+const replyImg = (token, originalURL, previewUrl) => {
+  originalURL = Array.isArray(originalURL) ? originalContentUrl : [originalURL];
+  previewUrl = Array.isArray(previewUrl) ? previewImageUrl : [previewUrl];
+  const img = [originalURL, previewUrl];
+  return client.replyMessage(
+    token,
+    img.map((originalurl) => ({ type: 'image', originalurl }))
+  );
+};
  
 function handleText(message, replyToken, source) {
- 
   
   switch (message.text) {
     case 'hai':
@@ -75,12 +80,17 @@ function handleText(message, replyToken, source) {
             .get(`http://api.duckduckgo.com/?q=${search}&format=json&pretty=1`)
             .then(response => {
               const hasilSearch = response.data.Abstract;
+              const hasilImg = response.Image
+              const hasilImg1 = response.Image
   
               if (hasilSearch.length < 1) {
-                return replyText(replyToken, ['pecarian not found'])
+                return replyText(replyToken, 'pecarian not found')
+              } else if (hasilImg.length > 1) {
+                 return replyImg(replyToken, hasilImg, hasilImg1)
               }
               else {
-                return replyText(replyToken, ['pencarian' + hasilSearch]);
+                
+                return replyText(replyToken, ['Hasil Pencarian ', '' + hasilSearch ]);
               }
             })
            .catch(err => console.log(err)) 

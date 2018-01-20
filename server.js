@@ -47,7 +47,6 @@ const replyText = (token, texts) => {
   );
 };
 
-
 function handleText(message, replyToken, source) {
   
   switch (message.text) {
@@ -75,21 +74,18 @@ function handleText(message, replyToken, source) {
               const hasilImg1 = response.Image
   
               switch (true) {
-              case hasilSearch.length < 1:
-                return replyText(replyToken, 'pecarian not found');
-
-              case hasilImg.length !== 0:
-                return client.replyMessage(
-                  replyToken,
-                  {
-                    type: 'image',
-                    originalContentUrl: hasilImg,
-                    previewImageUrl: hasilImg
-                 })
-
-              default:
-                 return replyText(replyToken, ['Hasil Pencarian ', '' + hasilSearch ]);    
-             }
+                case hasilSearch.length < 1:
+                  return replyText(replyToken, 'maaf aku ga nemuin');
+                default:
+                  return [
+                    client.replyMessage(replyToken, { type: 'image',  originalContentUrl: hasilImg,
+                    previewImageUrl: hasilImg}), 
+                    replyText(replyToken, ['hasil pencarian kamu adalah', '' + handleSearch])
+                  ]
+              }
+            })
+           .catch(err => console.log(err)) 
+        }
         return handleSearch();
   }
 }

@@ -73,14 +73,14 @@ function handleText(message, replyToken, source) {
           const search = message.text
           axios
             .get(`http://api.duckduckgo.com/?q=${search}&format=json&pretty=1`)
-            .then(res => {
-              const data = response.Results[0].FirstURL;
+            .then(response => {
+              const hasilSearch = response.data.Abstract;
   
-              if (data.childern.length < 1) {
+              if (hasilSearch.length < 1) {
                 return replyText(replyToken, ['pecarian not found'])
               }
               else {
-                return replyText(replyToken, ['pencarian' + data]);
+                return replyText(replyToken, ['pencarian' + hasilSearch]);
               }
             })
            .catch(err => console.log(err)) 

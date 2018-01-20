@@ -70,17 +70,31 @@ function handleText(message, replyToken, source) {
             .get(`http://api.duckduckgo.com/?q=${search}&format=json&pretty=1`)
             .then(response => {
               const hasilSearch = response.data.Abstract;
-              const hasilImg = response.Image
-              const hasilImg1 = response.Image
+              const hasilImg = response.data.Image
+              const hasilImg1 = response13.Image
   
               switch (true) {
                 case hasilSearch.length < 1:
                   return replyText(replyToken, 'maaf aku ga nemuin');
                 default:
                   return [
-                    client.replyMessage(replyToken, { type: 'image',  originalContentUrl: hasilImg,
-                    previewImageUrl: hasilImg}), 
-                    replyText(replyToken, ['hasil pencarian kamu adalah', '' + hasilSearch])
+                    client.replyMessage(replyToken, {
+                      "type": "template",
+                      "altText": "Hasil Pencarian Kamu" + hasilSearch,
+                      "template": {
+                          "type": "image_carousel",
+                          "columns": [
+                              {
+                                "imageUrl": hasilImg,
+                                "action": {
+                                  "type": "postback",
+                                  "label": "go to url",
+                                  "data": "action=buy&itemid=111"
+                                }
+                              }
+                          ]
+                      }
+                    })
                   ]
               }
             })

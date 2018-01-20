@@ -47,16 +47,7 @@ const replyText = (token, texts) => {
   );
 };
 
-const replyImg = (token, originalURL, previewUrl) => {
-  originalURL = Array.isArray(originalURL) ? originalContentUrl : [originalURL];
-  previewUrl = Array.isArray(previewUrl) ? previewImageUrl : [previewUrl];
-  const img = [originalURL, previewUrl];
-  return client.replyMessage(
-    token,
-    img.map((originalurl) => ({ type: 'image', originalurl }))
-  );
-};
- 
+
 function handleText(message, replyToken, source) {
   
   switch (message.text) {
@@ -83,18 +74,22 @@ function handleText(message, replyToken, source) {
               const hasilImg = response.Image
               const hasilImg1 = response.Image
   
-              if (hasilSearch.length < 1) {
-                return replyText(replyToken, 'pecarian not found')
-              } else if (hasilImg.length > 1) {
-                 return replyImg(replyToken, hasilImg, hasilImg1)
-              }
-              else {
-                
-                return replyText(replyToken, ['Hasil Pencarian ', '' + hasilSearch ]);
-              }
-            })
-           .catch(err => console.log(err)) 
-        }
+              switch (true) {
+              case hasilSearch.length < 1:
+                return replyText(replyToken, 'pecarian not found');
+
+              case hasilImg.length !== 0:
+                return client.replyMessage(
+                  replyToken,
+                  {
+                    type: 'image',
+                    originalContentUrl: hasilImg,
+                    previewImageUrl: hasilImg
+                 })
+
+              default:
+                 return replyText(replyToken, ['Hasil Pencarian ', '' + hasilSearch ]);    
+             }
         return handleSearch();
   }
 }

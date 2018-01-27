@@ -13,21 +13,8 @@ const config = {
 
 const translate = require('node-google-translate-free')
 
-const options = {
-		"useragent": "My duckduckgo app",
-		"no_redirects": "1",
-        "no_html": "0",
-        "format": "json"
-};
-
 // create LINE SDK client
 const client = new line.Client(config);
-
-
-
-// need raw buffer for signature validation
-
-// init with auth
 
 const app = express();
  
@@ -49,15 +36,20 @@ const replyText = (token, texts) => {
   );
 };
 
-const cari = {
-      q: message.text,
-      source: 'en',
-      target: 'id'
-}
+function handleCari(message) {
+  const cari = {
+    q: message.text,
+    source: 'en',
+    target: 'id'
+    } 
+  return cari;
+
+};
+
 
 function getSearchAsync(cari) {
   return new Promise (function(resolve, reject){
-      translate(cari, function(err, data){
+      translate(handleCari(message), function(err, data){
         if(err !== null) return reject(err);
           resolve(data)
       })

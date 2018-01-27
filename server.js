@@ -11,7 +11,7 @@ const config = {
   channelSecret: "056b3f3a932f10d7f86011989907f0ac",
 };
 
-const translate = require('../lib/translate')
+const translate = require('node-google-translate-free')
 
 const options = {
 		"useragent": "My duckduckgo app",
@@ -50,7 +50,7 @@ const replyText = (token, texts) => {
 };
 
 const cari = {
-      q: '',
+      q: message.text,
       source: 'en',
       target: 'id'
 }

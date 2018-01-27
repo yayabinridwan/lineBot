@@ -44,17 +44,14 @@ async function getSearchmes(message) {
     const hasilSearch = search.data.Abstract;
     const hasilImg = search.data.Image;
     console.log(hasilSearch);
-    function foo() {
-      translate({
+    translate({
       q: hasilSearch,
       source: 'en',
       target: 'id'
       } , function(result){
-    return result;
+    console.log(result);
     });
-    const hasilTranslate = await foo();
-    console.log(hasilSearch.result)
-  }}
+  }
   catch(e) {
     console.error(e);
   }

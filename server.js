@@ -43,13 +43,7 @@ async function getSearchmes(message, replyToken, source) {
     const search = await  axios(`http://api.duckduckgo.com/?q=${query}&format=json&pretty=1`)
     const hasilSearch = search.data.Abstract;
     const hasilImg = search.data.Image;
-    console.log(hasilSearch);
-    const hasilTranslate = yield translate({
-      q: hasilSearch,
-      source: 'en',
-      target: 'id'
-      });
-    console.log(hasilTranslate)
+    return hasilSearch;
   }
   catch(e) {
     console.error(e);
@@ -74,7 +68,17 @@ function handleText(message, replyToken, source) {
         }
 
       default:
-         return getSearchmes(message, replyToken, source);
+         async getHasilSearch() {
+           try {
+            const tampil = await getSearchmes(message, replyToken, source);
+            const hasilAkhir = hasilSearch
+            return replyText(replyToken, ['haasil yang kamu cari: ', `${hasilSearch}`])
+           } 
+           catch (e) {
+             console.log(e);
+           }          
+         }
+         return getHasilSearch(message, replyToken, source);
   }
 }
 // listen on port

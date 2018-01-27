@@ -1,3 +1,6 @@
+import { resolve } from 'path';
+import { setTimeout } from 'timers';
+
 'use strict';
 
 const line = require('@line/bot-sdk');
@@ -47,6 +50,25 @@ const replyText = (token, texts) => {
   );
 };
 
+function getSearchText() {
+  return new Promise(resolve => {
+    setTimeout(() => resolve('search', 2000))
+  });
+}
+
+async function getSearch() {
+  const query = message.text
+  try {
+    const search = await  axios(`http://api.duckduckgo.com/?q=${query}&format=json&pretty=1`)
+    console.log(search.data)
+    const hasilSearch = search.data.Abstract;
+    const hasilImg = response.data.Image;
+  }
+  catch (e) {
+    console.error(e);
+  }
+}
+
 function handleText(message, replyToken, source) {
   
   switch (message.text) {
@@ -64,45 +86,7 @@ function handleText(message, replyToken, source) {
         return replyText(replyToken, 'Bot can\'t use profile API without user ID');    
         }
       default:
-        function handleSearch() {
-          const search = message.text
-          axios
-            .get(`http://api.duckduckgo.com/?q=${search}&format=json&pretty=1`)
-            .then(response => {
-              const hasilSearch = response.data.Abstract;
-              const hasilImg = response.data.Image
-              const hasilImg1 = response13.Image
-  
-              switch (true) {
-                case hasilSearch.length < 1:
-                  return replyText(replyToken, 'maaf aku ga nemuin');
-                default:
-                  return [
-                    client.replyMessage(replyToken, {
-                      type: 'template',
-                      altText: 'Carousel alt text',
-                      template: {
-                        type: 'carousel',
-                        columns: [
-                          {
-                            thumbnailImageUrl: hasilImg,
-                            title: 'hasil pencarian',
-                            text: hasilSearch,
-                            actions: [
-                              { label: 'Go to url', type: 'url', url: 'google.com' },
-                              { label: 'Terimakasih atas pencarian kamu', type: 'postback', data: 'terimakasih' },
-                            ],
-                          }
-                        ],
-                      },
-                    }
-                  )
-                  ]
-              }
-            })
-           .catch(err => console.log(err)) 
-        }
-        return handleSearch();
+        return getSearch();
   }
 }
 // listen on port
@@ -144,3 +128,4 @@ app.listen(port, () => {
   console.log(`listening on ${port}`);
 
     });
+

@@ -43,10 +43,11 @@ async function getSearchmes(message, replyToken, source) {
     const search = await  axios(`http://api.duckduckgo.com/?q=${query}&format=json&pretty=1`)
     const hasilSearch = search.data.Abstract;
     const hasilImg = search.data.Image;
+    console.log(hasilSearch);
     function getSearchAsync(message, replyToken, source) {
       return new Promise (function(resolve, reject){
           translate({
-            q: hasilSearch,
+            q: `${hasilSearch}`,
             source: 'en',
             target: 'id'
             } , function(err, data){

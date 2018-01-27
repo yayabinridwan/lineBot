@@ -37,7 +37,7 @@ const replyText = (token, texts) => {
 
 
 
-async function getSearchmes(message, replyToken, source) {
+async function getSearchmes(message) {
   try {
     const query = message.text;
     const search = await  axios(`http://api.duckduckgo.com/?q=${query}&format=json&pretty=1`)

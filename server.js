@@ -44,20 +44,17 @@ async function getSearchmes(message) {
     const hasilSearch = search.data.Abstract;
     const hasilImg = search.data.Image;
     console.log(hasilSearch);
-    function getSearchAsync() {
-      return new Promise (function(resolve, reject){
-          translate({
-            q: hasilSearch,
-            source: 'en',
-            target: 'id'
-            } , function(err, result){
-            if(err !== null) return reject(err)
-              resolve(console.log(result))
-          })
-      })
-    };
-    const hasilTranslate = await getSearchAsync();
-  }
+    function foo() {
+      translate({
+      q: hasilSearch,
+      source: 'en',
+      target: 'id'
+      } , function(result){
+    return result;
+    });
+    const hasilTranslate = await foo();
+    console.log(hasilSearch.result)
+  }}
   catch(e) {
     console.error(e);
   }

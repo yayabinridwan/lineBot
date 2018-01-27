@@ -50,9 +50,9 @@ async function getSearchmes(message) {
             q: hasilSearch,
             source: 'en',
             target: 'id'
-            } , function(err, data){
+            } , function(err, result){
             if(err !== null) return reject(err);
-              resolve(data)
+              resolve(result)
           })
       })
     };

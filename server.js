@@ -1,5 +1,3 @@
-import { resolve } from 'url';
-
 'use strict';
 
 const line = require('@line/bot-sdk');

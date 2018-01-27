@@ -8,13 +8,16 @@
   },
   "author": "",
   "license": "ISC",
+  "engines": {
+    "node": "8.x"
+  },
   "dependencies": {
     "@line/bot-sdk": "^5.2.0",
     "axios": "^0.17.1",
     "child-process-promise": "^2.2.1",
     "crypto": "^1.0.1",
-    "ddg": "^0.0.3",
     "express": "^4.16.2",
+    "node-google-translate-free": "^0.1.0",
     "node-line-bot-api": "^0.1.4",
     "request": "^2.83.0"
   }

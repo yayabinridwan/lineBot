@@ -1,5 +1,4 @@
-import { resolve } from 'path';
-import { setTimeout } from 'timers';
+import { resolve } from 'url';
 
 'use strict';
 
@@ -12,7 +11,7 @@ const config = {
   channelSecret: "056b3f3a932f10d7f86011989907f0ac",
 };
 
-const ddg = require('ddg');
+const translate = require('../lib/translate')
 
 const options = {
 		"useragent": "My duckduckgo app",
@@ -50,21 +49,21 @@ const replyText = (token, texts) => {
   );
 };
 
-function getSearchText() {
-  return new Promise(resolve => {
-    setTimeout(() => resolve('search', 2000))
-  });
-}
-
-async function getSearch() {
-  const query = message.text
+async function getSearchmes(message) {
   try {
+    const query = message.text;
     const search = await  axios(`http://api.duckduckgo.com/?q=${query}&format=json&pretty=1`)
     console.log(search.data)
     const hasilSearch = search.data.Abstract;
-    const hasilImg = response.data.Image;
+    const hasilImg = search.data.Image;
+    const hasilTranslate = await translate({
+      q: hasilSearch,
+      source: 'en',
+      target: 'id'
+    }); 
+    console.log(hasilTranslate.result)
   }
-  catch (e) {
+  catch(e) {
     console.error(e);
   }
 }
@@ -86,7 +85,7 @@ function handleText(message, replyToken, source) {
         return replyText(replyToken, 'Bot can\'t use profile API without user ID');    
         }
       default:
-        return getSearch();
+         return getSearchmes
   }
 }
 // listen on port

@@ -9,7 +9,7 @@ const config = {
   channelSecret: "056b3f3a932f10d7f86011989907f0ac",
 };
 
-const translate = require('node-google-translate-free')
+const translate = require('node-google-translate-free/lib/translate')
 
 // create LINE SDK client
 const client = new line.Client(config);

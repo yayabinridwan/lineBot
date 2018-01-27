@@ -49,19 +49,30 @@ const replyText = (token, texts) => {
   );
 };
 
-async function getSearchmes(message) {
+const cari = {
+      q: '',
+      source: 'en',
+      target: 'id'
+}
+
+function getSearchAsync(cari) {
+  return new Promise (function(resolve, reject){
+      translate(cari, function(err, data){
+        if(err !== null) return reject(err);
+          resolve(data)
+      })
+  })
+}
+
+async function getSearchmes(message, replyToken, source) {
   try {
     const query = message.text;
     const search = await  axios(`http://api.duckduckgo.com/?q=${query}&format=json&pretty=1`)
     console.log(search.data)
     const hasilSearch = search.data.Abstract;
     const hasilImg = search.data.Image;
-    const hasilTranslate = await translate({
-      q: hasilSearch,
-      source: 'en',
-      target: 'id'
-    }); 
-    console.log(hasilTranslate.result)
+    const hasilTranslate = await getSearchAsync(cari);
+    console.log(hasilTranslate.data)
   }
   catch(e) {
     console.error(e);
@@ -84,8 +95,9 @@ function handleText(message, replyToken, source) {
       } else {
         return replyText(replyToken, 'Bot can\'t use profile API without user ID');    
         }
+
       default:
-         return getSearchmes
+         return getSearchmes(message);
   }
 }
 // listen on port

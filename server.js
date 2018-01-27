@@ -36,20 +36,14 @@ const replyText = (token, texts) => {
   );
 };
 
-function handleCari(message) {
-  const cari = {
-    q: message.text,
-    source: 'en',
-    target: 'id'
-    } 
-  return cari;
 
-};
-
-
-function getSearchAsync(cari) {
+function getSearchAsync(message, replyToken, source) {
   return new Promise (function(resolve, reject){
-      translate(handleCari(message), function(err, data){
+      translate({
+        q: message.text,
+        source: 'en',
+        target: 'id'
+        } , function(err, data){
         if(err !== null) return reject(err);
           resolve(data)
       })

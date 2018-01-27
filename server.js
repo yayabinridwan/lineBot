@@ -57,7 +57,7 @@ async function getSearchmes(message, replyToken, source) {
       })
     };
     const hasilTranslate = await getSearchAsync();
-    console.log(hasilTranslate.data)
+    console.log(hasilTranslate.result)
   }
   catch(e) {
     console.error(e);

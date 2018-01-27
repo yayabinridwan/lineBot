@@ -37,20 +37,19 @@ const replyText = (token, texts) => {
 
 
 
-async function getSearchmes(message) {
+async function getSearchmes(message, replyToken, source) {
   try {
     const query = message.text;
     const search = await  axios(`http://api.duckduckgo.com/?q=${query}&format=json&pretty=1`)
     const hasilSearch = search.data.Abstract;
     const hasilImg = search.data.Image;
     console.log(hasilSearch);
-    translate({
+    const hasilTranslate = yield translate({
       q: hasilSearch,
       source: 'en',
       target: 'id'
-      } , function(result){
-    console.log(result);
-    });
+      });
+    console.log(hasilTranslate)
   }
   catch(e) {
     console.error(e);
@@ -75,7 +74,7 @@ function handleText(message, replyToken, source) {
         }
 
       default:
-         return getSearchmes(message);
+         return getSearchmes(message, replyToken, source);
   }
 }
 // listen on port

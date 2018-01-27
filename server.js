@@ -44,7 +44,7 @@ async function getSearchmes(message, replyToken, source) {
     const hasilSearch = search.data.Abstract;
     const hasilImg = search.data.Image;
     console.log(hasilSearch);
-    function getSearchAsync(message, hasilSearch) {
+    function getSearchAsync() {
       return new Promise (function(resolve, reject){
           translate({
             q: hasilSearch,
@@ -56,7 +56,7 @@ async function getSearchmes(message, replyToken, source) {
           })
       })
     };
-    const hasilTranslate = await getSearchAsync(message, hasilSearch);
+    const hasilTranslate = await getSearchAsync();
     console.log(hasilTranslate.data)
   }
   catch(e) {

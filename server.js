@@ -57,7 +57,7 @@ async function getSearchmes(message, replyToken, source) {
     console.log(search.data)
     const hasilSearch = search.data.Abstract;
     const hasilImg = search.data.Image;
-    const hasilTranslate = await getSearchAsync(cari);
+    const hasilTranslate = await getSearchAsync(message, replyToken, source);
     console.log(hasilTranslate.data)
   }
   catch(e) {

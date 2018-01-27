@@ -35,26 +35,26 @@ const replyText = (token, texts) => {
 };
 
 
-function getSearchAsync(message, replyToken, source) {
-  return new Promise (function(resolve, reject){
-      translate({
-        q: message.text,
-        source: 'en',
-        target: 'id'
-        } , function(err, data){
-        if(err !== null) return reject(err);
-          resolve(data)
-      })
-  })
-}
+
 
 async function getSearchmes(message, replyToken, source) {
   try {
     const query = message.text;
     const search = await  axios(`http://api.duckduckgo.com/?q=${query}&format=json&pretty=1`)
-    console.log(search.data)
     const hasilSearch = search.data.Abstract;
     const hasilImg = search.data.Image;
+    function getSearchAsync(message, replyToken, source) {
+      return new Promise (function(resolve, reject){
+          translate({
+            q: hasilSearch,
+            source: 'en',
+            target: 'id'
+            } , function(err, data){
+            if(err !== null) return reject(err);
+              resolve(data)
+          })
+      })
+    };
     const hasilTranslate = await getSearchAsync(message, replyToken, source);
     console.log(hasilTranslate.data)
   }

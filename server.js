@@ -44,7 +44,7 @@ async function getSearchmes(message, replyToken, source) {
     const hasilSearch = search.data.Abstract;
     const hasilImg = search.data.Image;
     const translating = await axios('https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=id&dt=t&1' + encodeURI(hasilSearch));
-    console.log(translating);
+    console.log(translating.data);
     return replyText(replyToken, ['hasil yang kamu cari', ``]);
   }
   catch(e) {

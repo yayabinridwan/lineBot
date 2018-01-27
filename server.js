@@ -51,13 +51,12 @@ async function getSearchmes(message) {
             source: 'en',
             target: 'id'
             } , function(err, result){
-            if(err !== null) return reject(err);
-              resolve(result)
+            if(err !== null) return reject(err)
+              resolve(console.log(result))
           })
       })
     };
     const hasilTranslate = await getSearchAsync();
-    console.log(hasilTranslate.result)
   }
   catch(e) {
     console.error(e);

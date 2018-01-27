@@ -44,10 +44,10 @@ async function getSearchmes(message, replyToken, source) {
     const hasilSearch = search.data.Abstract;
     const hasilImg = search.data.Image;
     console.log(hasilSearch);
-    function getSearchAsync(message, replyToken, source) {
+    function getSearchAsync(message, hasilSearch) {
       return new Promise (function(resolve, reject){
           translate({
-            q: `${hasilSearch}`,
+            q: hasilSearch,
             source: 'en',
             target: 'id'
             } , function(err, data){
@@ -56,7 +56,7 @@ async function getSearchmes(message, replyToken, source) {
           })
       })
     };
-    const hasilTranslate = await getSearchAsync(message, replyToken, source);
+    const hasilTranslate = await getSearchAsync(message, hasilSearch);
     console.log(hasilTranslate.data)
   }
   catch(e) {

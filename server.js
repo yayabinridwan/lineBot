@@ -61,6 +61,7 @@ async function getSearchmes(message, replyToken, source) {
       json: true,
     };
     const responseHasil = await request(opt);
+    console.log(JSON.stringify(responseHasil));
     return replyText(replyToken, ['hasil yang kamu cari']);
   }
   catch(e) {

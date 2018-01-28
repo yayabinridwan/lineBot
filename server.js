@@ -43,9 +43,10 @@ async function getSearchmes(message, replyToken, source) {
     const search = await  axios(`http://api.duckduckgo.com/?q=${query}&format=json&pretty=1`)
     const hasilSearch = search.data.Abstract;
     const hasilImg = search.data.Image;
-    const translating = await axios('https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=id&dt=t&1' + encodeURI(hasilSearch));
-    console.log(translating.data);
-    return replyText(replyToken, ['hasil yang kamu cari', ``]);
+    const translating = await axios('https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=id&dt=t&q=' + encodeURI(hasilSearch));
+    const parseJson = JSON.stringify(JSON.parse(translating.data), null, 2);
+    console.log(parseJson);
+    return replyText(replyToken, ['hasil yang kamu cari']);
   }
   catch(e) {
     console.error(e);

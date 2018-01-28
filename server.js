@@ -8,9 +8,7 @@ const config = {
   channelAccessToken: "bP51u0Q7bORxv5Eh4Z3kP4SoDLEqP+ysPnqxCRy9oZwjsSoQHTviSLk7BVbapb0PFXhkniJpz9wAqGpDp+4J2MhuZmrmZWCizhSBXllUKuonnx81ESGGkB8CDJiwqIk64DK4E1V6+nqePqEQSWpRagdB04t89/1O/w1cDnyilFU=" ,
   channelSecret: "056b3f3a932f10d7f86011989907f0ac",
 };
-
-const translate = require('node-google-translate-skidz')
-
+const request = require('request-promise')
 // create LINE SDK client
 const client = new line.Client(config);
 
@@ -43,8 +41,26 @@ async function getSearchmes(message, replyToken, source) {
     const search = await  axios(`http://api.duckduckgo.com/?q=${query}&format=json&pretty=1`)
     const hasilSearch = search.data.Abstract;
     const hasilImg = search.data.Image;
-    const translating = await axios('https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=id&dt=t&q=' + encodeURI(hasilSearch));
-    console.log(translating.data[0][0][0]);
+    const url = "https://translate.google.com/translate_a/single"
+    + "?client=at&dt=t&dt=ld&dt=qca&dt=rm&dt=bd&dj=1&hl=es-ES&ie=UTF-8"
+    + "&oe=UTF-8&inputm=2&otf=2&iid=1dd3b944-fa62-4b55-b330-74909a99969e";
+    const data = {
+      'sl': sourceLang,
+      'tl': targetLang,
+      'q': hasilSearch,
+    };
+    const opt = {
+      method: 'POST',
+      uri: url,
+      encoding: 'UTF-8',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8',
+        'User-Agent': 'AndroidTranslate/5.3.0.RC02.130475354-53000263 5.1 phone TRANSLATE_OPM5_TEST_1',
+      },
+      form: data,
+      json: true,
+    };
+    const responseHasil = await request(opt);
     return replyText(replyToken, ['hasil yang kamu cari']);
   }
   catch(e) {

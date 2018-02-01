@@ -1,5 +1,7 @@
 'use strict';
 
+//module
+
 const line = require('@line/bot-sdk');
 const express = require('express');
 const axios = require('axios');
@@ -8,11 +10,20 @@ const config = {
   channelAccessToken: "bP51u0Q7bORxv5Eh4Z3kP4SoDLEqP+ysPnqxCRy9oZwjsSoQHTviSLk7BVbapb0PFXhkniJpz9wAqGpDp+4J2MhuZmrmZWCizhSBXllUKuonnx81ESGGkB8CDJiwqIk64DK4E1V6+nqePqEQSWpRagdB04t89/1O/w1cDnyilFU=" ,
   channelSecret: "056b3f3a932f10d7f86011989907f0ac",
 };
+const request1 = require('request'),
+    cheerioTableparser = require('cheerio-tableparser');
 const request = require('request-promise')
+let cheerio = require('cheerio');
 // create LINE SDK client
+
 const client = new line.Client(config);
 
+//create express serve
 const app = express();
+
+//url scrape
+const base_url = 'http://www.bmkg.go.id/gempabumi/gempabumi-dirasakan.bmkg';
+
  
 // register a webhook handler with middleware
 // about the middleware, please refer to doc
@@ -24,6 +35,8 @@ app.post('/callback', line.middleware(config), (req, res) => {
  
 });
 
+
+//replyMessage
 const replyText = (token, texts) => {
   texts = Array.isArray(texts) ? texts : [texts];
   return client.replyMessage(
@@ -32,9 +45,47 @@ const replyText = (token, texts) => {
   );
 };
 
+async function gempaScrape() {
+  let gempapa = await axios.get(base_url)
+  return gempapa;
+}
+
+async function getScrapeSchedule(message, replyToken, source) {
+    const gempaScraped = await gempaScrape().then((response)=>{
+      let $ = cheerio.load(response.data);
+      let gempa = [];
+      $('tr', '.table').each( (i, elm) => {
+        gempa.push( {
+          No: $(elm).children().first().text(),
+          waktuGempa: {
+            waktu: $(elm).children().eq(1).first().text(),
+            lintangBujur: $(elm).children().eq(2).first().text()
+          },
+          kekuatan: {
+            skala: $(elm).children().eq(3).first().text(),
+            kedalaman: $(elm).children().eq(4).first().text()
+          },
+          tempat: {
+            gempaDirasaakan: $(elm).children().eq(5).first().text(),
+          }
+        });
+      });
+      const waktuGempa = gempa[1].waktuGempa.waktu
+      const tempatGempa = gempa[1].tempat.gempaDirasaakan
+      const tempatGempaa = tempatGempa.substr(0, 50);
+      const dataAKhir = [waktuGempa, tempatGempaa]
+      return(dataAKhir);
+    });
+    const sec = 1000;
+    const min = 60;
+    const time = sec*min*60; 
+    return replyText(replyToken, ['info gempa terkini', `telah terjadi gempa di ${gempaScraped[0]} pada ${gempaScraped[1]} `])
+}
 
 
 
+
+//handle search
 async function getSearchmes(message, replyToken, source) {
   try {
     const query = message.text;
@@ -45,8 +96,8 @@ async function getSearchmes(message, replyToken, source) {
     + "?client=at&dt=t&dt=ld&dt=qca&dt=rm&dt=bd&dj=1&hl=es-ES&ie=UTF-8"
     + "&oe=UTF-8&inputm=2&otf=2&iid=1dd3b944-fa62-4b55-b330-74909a99969e";
     const data = {
-      'sl': sourceLang,
-      'tl': targetLang,
+      'sl': 'en',
+      'tl': 'id',
       'q': hasilSearch,
     };
     const opt = {
@@ -69,6 +120,7 @@ async function getSearchmes(message, replyToken, source) {
   }
 }
 
+//handel messgaeText
 function handleText(message, replyToken, source) {
   
   switch (message.text) {
@@ -84,9 +136,11 @@ function handleText(message, replyToken, source) {
           ));
       } else {
         return replyText(replyToken, 'Bot can\'t use profile API without user ID');    
-        }
+        };
+     case 'gempa bumi':
+        return getScrapeSchedule(message, replyToken, source)
 
-      default:
+     default:
          return getSearchmes(message, replyToken, source);
   }
 }

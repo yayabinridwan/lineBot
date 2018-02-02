@@ -18,6 +18,9 @@
     "crypto": "^1.0.1",
     "express": "^4.16.2",
     "node-line-bot-api": "^0.1.4",
-    "request-promise": "^4.2.2"
+    "request-promise": "^4.2.2",
+    "request": "^2.83.0",
+    "cheerio-tableparser": "^1.0.1",
+    "cheerio": "^0.22.0"
   }
 }

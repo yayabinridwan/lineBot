@@ -10,10 +10,12 @@ const config = {
   channelAccessToken: "bP51u0Q7bORxv5Eh4Z3kP4SoDLEqP+ysPnqxCRy9oZwjsSoQHTviSLk7BVbapb0PFXhkniJpz9wAqGpDp+4J2MhuZmrmZWCizhSBXllUKuonnx81ESGGkB8CDJiwqIk64DK4E1V6+nqePqEQSWpRagdB04t89/1O/w1cDnyilFU=" ,
   channelSecret: "056b3f3a932f10d7f86011989907f0ac",
 };
-const request1 = require('request'),
+const request = require('request'),
     cheerioTableparser = require('cheerio-tableparser');
-const request = require('request-promise')
-let cheerio = require('cheerio');
+const request1 = require('request-promise');
+const cheerio = require('cheerio');
+const scrape = require('./lib/scrape.js');
+const cari = require('./lib/fiturCari.js')
 // create LINE SDK client
 
 const client = new line.Client(config);
@@ -45,103 +47,39 @@ const replyText = (token, texts) => {
   );
 };
 
-async function gempaScrape() {
-  let gempapa = await axios.get(base_url)
-  return gempapa;
-}
-
-async function getScrapeSchedule(message, replyToken, source) {
-    const gempaScraped = await gempaScrape().then((response)=>{
-      let $ = cheerio.load(response.data);
-      let gempa = [];
-      $('tr', '.table').each( (i, elm) => {
-        gempa.push( {
-          No: $(elm).children().first().text(),
-          waktuGempa: {
-            waktu: $(elm).children().eq(1).first().text(),
-            lintangBujur: $(elm).children().eq(2).first().text()
-          },
-          kekuatan: {
-            skala: $(elm).children().eq(3).first().text(),
-            kedalaman: $(elm).children().eq(4).first().text()
-          },
-          tempat: {
-            gempaDirasaakan: $(elm).children().eq(5).first().text(),
-          }
-        });
-      });
-      const waktuGempa = gempa[1].waktuGempa.waktu
-      const tempatGempa = gempa[1].tempat.gempaDirasaakan
-      const tempatGempaa = tempatGempa.substr(0, 50);
-      const dataAKhir = [waktuGempa, tempatGempaa]
-      return(dataAKhir);
-    });
-    const sec = 1000;
-    const min = 60;
-    const time = sec*min*60; 
-    return replyText(replyToken, ['info gempa terkini', `telah terjadi gempa di ${gempaScraped[0]} pada ${gempaScraped[1]} `])
-}
-
-
-
-
-//handle search
-async function getSearchmes(message, replyToken, source) {
-  try {
-    const query = message.text;
-    const search = await  axios(`http://api.duckduckgo.com/?q=${query}&format=json&pretty=1`)
-    const hasilSearch = search.data.Abstract;
-    const hasilImg = search.data.Image;
-    const url = "https://translate.google.com/translate_a/single"
-    + "?client=at&dt=t&dt=ld&dt=qca&dt=rm&dt=bd&dj=1&hl=es-ES&ie=UTF-8"
-    + "&oe=UTF-8&inputm=2&otf=2&iid=1dd3b944-fa62-4b55-b330-74909a99969e";
-    const data = {
-      'sl': 'en',
-      'tl': 'id',
-      'q': hasilSearch,
-    };
-    const opt = {
-      method: 'POST',
-      uri: url,
-      encoding: 'UTF-8',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8',
-        'User-Agent': 'AndroidTranslate/5.3.0.RC02.130475354-53000263 5.1 phone TRANSLATE_OPM5_TEST_1',
-      },
-      form: data,
-      json: true,
-    };
-    const responseHasil = await request(opt);
-    console.log(JSON.stringify(responseHasil));
-    return replyText(replyToken, ['hasil yang kamu cari']);
-  }
-  catch(e) {
-    console.error(e);
-  }
+async function gempaScraping(message, replyToken, source) {
+    const gempaScraped = await scrape.gempa();
+    return replyText(replyToken, ['info gempa terkini', `telah terjadi gempa di ${gempaScraped[1]} pada ${gempaScraped[0]} dengan kekuatan gempa sebessar ${gempaScraped[2]} Skala Richter pada kedalaman ${gempaScraped[3]}`, 'sumber: bmkg.go.id'])
 }
 
 //handel messgaeText
 function handleText(message, replyToken, source) {
-  
-  switch (message.text) {
-    case 'hai':
+  const pesan = message.text.toLowerCase()
+  switch (pesan) {
+     case 'hi':
       if (source.userId) {
         return client.getProfile(source.userId)
           .then((profile) => replyText(
             replyToken,
             [
-              `Halo kak ${profile.displayName}`,
-              `gimana kabarnya?`,
+              `Halo ${profile.displayName}, ada yang bisa dibantu sob??`,
+              `gw bisa cariin kamu info mini ensiklopedia dengan ketik apa yang mau dicari, contoh: Raisa Andriana `,
+              'gw bisa cariin kamu info gempa dengan ketik: info gempa bumi',
+              'kalo mau tau info tentng gw bisa ketik: info bot'
             ]
           ));
       } else {
         return replyText(replyToken, 'Bot can\'t use profile API without user ID');    
         };
-     case 'gempa bumi':
-        return getScrapeSchedule(message, replyToken, source)
+     case 'info bot':
+        return replyText(replyToken, 'gw bot yang bisa ngasih lo info tentang mini ensiklopedia & info gempa',
+      'bot created by: Ankaboet Creative'); 
+
+     case 'info gempa bumi':
+        return gempaScraping(message, replyToken, source)
 
      default:
-         return getSearchmes(message, replyToken, source);
+         return cari.fiturCari(message, replyToken, source);
   }
 }
 // listen on port

@@ -14,7 +14,7 @@ const request = require('request'),
     cheerioTableparser = require('cheerio-tableparser');
 const request1 = require('request-promise');
 const cheerio = require('cheerio');
-const scrape = require('./lib/scrape.js');
+const scrape = require('./lib/scrapeGempa.js');
 const cari = require('./lib/fiturCari.js')
 // create LINE SDK client
 
@@ -62,17 +62,15 @@ function handleText(message, replyToken, source) {
           .then((profile) => replyText(
             replyToken,
             [
-              `Halo ${profile.displayName}, ada yang bisa dibantu sob??`,
-              `gw bisa cariin kamu info mini ensiklopedia dengan ketik apa yang mau dicari, contoh: Raisa Andriana `,
-              'gw bisa cariin kamu info gempa dengan ketik: info gempa bumi',
-              'kalo mau tau info tentng gw bisa ketik: info bot'
+              `Halo ${profile.displayName}, ada yang bisa dibantu sob?? gw bisa cariin kamu info mini ensiklopedia dengan ketik apa yang mau dicari, contoh: Raisa Andriana.
+              gw juga bisa cariin kamu info gempa dengan ketik: info gempa bumi. kalo mau tau info tentng gw bisa ketik: info bot`,
             ]
           ));
       } else {
         return replyText(replyToken, 'Bot can\'t use profile API without user ID');    
         };
      case 'info bot':
-        return replyText(replyToken, 'gw bot yang bisa ngasih lo info tentang mini ensiklopedia & info gempa',
+        return replyText(replyToken, 'nama gw abdillah, biasanya dipanggil abdi. gw bisa ngasih lo info tentang mini ensiklopedia & info gempa',
       'bot created by: Ankaboet Creative'); 
 
      case 'info gempa bumi':
